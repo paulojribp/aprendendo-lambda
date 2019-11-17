@@ -4,13 +4,49 @@ import br.com.javadevzone.modelo.Usuario;
 
 import java.util.*;
 import java.util.function.*;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Main {
 
+    private static List<Usuario> usuarios = new ArrayList<>();
+
+    static {
+        usuarios.add(new Usuario("Jose Silva", 10));
+        usuarios.add(new Usuario("Pedro Cabral", 25));
+        usuarios.add(new Usuario("Reebrtv", 450));
+        usuarios.add(new Usuario("Zebulu", 10));
+        usuarios.add(new Usuario("Luanslf", 10));
+        usuarios.add(new Usuario("Josue da Costa", 320));
+        usuarios.add(new Usuario("Henrique Silva", 500));
+    }
+
     public static void main(String[] args) {
-        usandoOptionalEStream();
+        maisSobreStreams();
+    }
+
+    private static void maisSobreStreams() {
+        List<Usuario> usuariosFiltrados = usuarios.stream()
+                .filter(u -> u.getPontos() > 100)
+                .sorted(Comparator.comparing(Usuario::getNome))
+                .collect(Collectors.toList());
+
+        Stream<Usuario> peek = usuarios.stream()
+                .filter(u -> u.getPontos() > 100).peek(System.out::println);
+
+        System.out.println("Antes do GET!");
+        peek.findAny().get();
+        System.out.println("Depois do GET!" + "\n");
+
+        int soma = usuarios.stream().mapToInt(Usuario::getPontos).sum();
+
+        IntBinaryOperator operator = (a, b) -> a + b;
+        int novaSoma = usuarios.stream().mapToInt(Usuario::getPontos).reduce(0, Math::max);
+
+        System.out.println(soma + " X " + novaSoma);
+
+        usuarios.stream().iterator().forEachRemaining(System.out::println);
     }
 
     private static void usandoOptionalEStream() {
