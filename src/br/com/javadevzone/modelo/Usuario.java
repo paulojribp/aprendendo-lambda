@@ -1,5 +1,6 @@
 package br.com.javadevzone.modelo;
 
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -38,5 +39,18 @@ public class Usuario {
 
     public String toString() {
         return "Usuario de nome " + this.nome + ", e pontos [" + this.pontos + "] e ele é moderador? " + this.moderador + "!";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Usuario usuario = (Usuario) o;
+        return Objects.equals(nome, usuario.nome);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nome);
     }
 }
